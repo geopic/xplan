@@ -7,7 +7,7 @@
     <main><router-view /></main>
     <footer>
       &copy; George Pickering 2020 |
-      <a href="https://github.com/geopic/xplan">GitHub repository</a>
+      <a href="https://github.com/geopic/xplan">GitHub repo</a>
     </footer>
   </div>
 </template>
@@ -54,9 +54,40 @@ export default class App extends Vue {
 
 #app {
   align-items: center;
+  box-sizing: border-box;
   display: grid;
   grid-template-rows: 50px auto 50px;
   height: 100vh;
   justify-content: center;
+  transition: background-color 250ms, color 250ms;
+
+  & > * {
+    height: 100%;
+    width: 100vw;
+  }
+
+  header {
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+
+    #site-title {
+      font-size: 160%;
+    }
+
+    #site-theme-switcher {
+      border-bottom: 1px solid black;
+      cursor: pointer;
+      padding: 5px 8px;
+      user-select: none;
+    }
+  }
+
+  footer {
+    align-items: center;
+    display: flex;
+    font-size: 90%;
+    justify-content: center;
+  }
 }
 </style>
