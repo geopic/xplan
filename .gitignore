@@ -2,6 +2,10 @@
 node_modules
 /dist
 .env
+/db
+
+# note-taking file
+notes
 
 # local env files
 .env.local

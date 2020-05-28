@@ -12,6 +12,9 @@ export default {
       return process.env.NODE_ENV === 'development'
         ? `http://localhost:${this.serverPort}`
         : '';
+    },
+    get lsEntry() {
+      return this.name;
     }
   }
 };
