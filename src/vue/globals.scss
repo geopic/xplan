@@ -13,3 +13,20 @@ $medquery-min-width-02: 750px;
 $medquery-min-width-03: 1020px;
 $medquery-min-width-04: 1400px;
 $medquery-min-width-05: 1860px;
+
+.theme-light {
+  --bgColor: #fafafa;
+  --color: #222;
+  --accent: #0085dd;
+}
+
+.theme-dark {
+  --bgColor: #222;
+  --color: #fafafa;
+  --accent: #ffa034;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}

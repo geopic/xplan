@@ -51,19 +51,7 @@ export default class App extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-.theme-light {
-  --bgColor: #fafafa;
-  --color: #222;
-  --accent: #0085dd;
-}
-
-.theme-dark {
-  --bgColor: #222;
-  --color: #fafafa;
-  --accent: #ffa034;
-}
-
+<style lang="scss">
 #app {
   align-items: center;
   background-color: var(--bgColor);
@@ -102,11 +90,6 @@ export default class App extends Vue {
     display: flex;
     font-size: 90%;
     justify-content: center;
-
-    a {
-      color: var(--accent);
-      text-decoration: none;
-    }
   }
 }
 </style>
