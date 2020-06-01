@@ -43,23 +43,27 @@ export default class App extends Vue {
 
 <style lang="scss" scoped>
 .theme-light {
-  background-color: #fafafa;
-  color: #222;
+  --bgColor: #fafafa;
+  --color: #222;
+  --accent: #0085dd;
 }
 
 .theme-dark {
-  background-color: #222;
-  color: #fafafa;
+  --bgColor: #222;
+  --color: #fafafa;
+  --accent: #ffa034;
 }
 
 #app {
   align-items: center;
+  background-color: var(--bgColor);
   box-sizing: border-box;
+  color: var(--color);
   display: grid;
   grid-template-rows: 50px auto 50px;
   height: 100vh;
   justify-content: center;
-  transition: background-color 250ms, color 250ms;
+  transition: background-color 250ms, border-color 250ms, color 250ms;
 
   & > * {
     height: 100%;
@@ -76,9 +80,9 @@ export default class App extends Vue {
     }
 
     #site-theme-switcher {
-      border-bottom: 1px solid black;
+      border-bottom: 1px dotted var(--accent);
       cursor: pointer;
-      padding: 5px 8px;
+      padding: 8px;
       user-select: none;
     }
   }
@@ -88,6 +92,11 @@ export default class App extends Vue {
     display: flex;
     font-size: 90%;
     justify-content: center;
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
   }
 }
 </style>
