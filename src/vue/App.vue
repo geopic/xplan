@@ -15,27 +15,37 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import utils from '@/common/utils';
+import { LsData } from '../common/types';
 
 @Component
 export default class App extends Vue {
   mounted() {
     document.title = this.$store.state.siteName;
 
-    if (utils.loadDataFromLS()?.theme === 'dark') {
+    // Initialise data object in localStorage if it does not exist
+    if (!utils.loadAllDataFromLS()) {
+      utils.initLS();
+    }
+
+    if (utils.loadAllDataFromLS()?.theme === 'dark') {
       this.$el.classList.remove('theme-light');
       this.$el.classList.add('theme-dark');
     }
   }
 
   toggleTheme() {
+    const data = utils.loadAllDataFromLS() as LsData;
+
     if (this.$el.classList.contains('theme-light')) {
       this.$el.classList.remove('theme-light');
       this.$el.classList.add('theme-dark');
-      utils.saveDataToLS({ theme: 'dark' });
+      data.theme = 'dark';
+      utils.saveAllToLS(data);
     } else if (this.$el.classList.contains('theme-dark')) {
       this.$el.classList.remove('theme-dark');
       this.$el.classList.add('theme-light');
-      utils.saveDataToLS({ theme: 'light' });
+      data.theme = 'light';
+      utils.saveAllToLS(data);
     }
   }
 }
@@ -63,7 +73,7 @@ export default class App extends Vue {
   grid-template-rows: 50px auto 50px;
   height: 100vh;
   justify-content: center;
-  transition: background-color 250ms, border-color 250ms, color 250ms;
+  transition: all 250ms;
 
   & > * {
     height: 100%;
