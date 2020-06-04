@@ -3,36 +3,39 @@ import { LsData } from '@/common/types';
 import utils from '@/common/utils';
 
 describe('utils', () => {
-  beforeEach(() => localStorage.clear());
+  describe('data methods', () => {
+    beforeEach(() => localStorage.clear());
 
-  const data: LsData = { theme: 'light', data: [] };
+    const data: LsData = { theme: 'light', data: [] };
 
-  test('initLS', () => {
-    expect(localStorage.getItem(props.site.lsEntry)).toBe(null);
-    utils.initLS();
-    expect(localStorage.getItem(props.site.lsEntry)).toEqual(
-      JSON.stringify(data)
-    );
-  });
+    test('init', () => {
+      expect(localStorage.getItem(props.site.lsEntry)).toBe(null);
+      utils.data.init();
+      expect(localStorage.getItem(props.site.lsEntry)).toEqual(
+        JSON.stringify(data)
+      );
+    });
 
-  test('loadAllDataFromLS', () => {
-    localStorage.setItem(props.site.lsEntry, JSON.stringify(data));
-    expect(utils.loadAllDataFromLS()).toEqual(data);
-  });
+    test('loadAll', () => {
+      expect(utils.data.loadAll()).toEqual(null);
+      localStorage.setItem(props.site.lsEntry, JSON.stringify(data));
+      expect(utils.data.loadAll()).toEqual(data);
+    });
 
-  test('saveAllToLS', () => {
-    utils.saveAllToLS(data);
-    expect(localStorage.getItem(props.site.lsEntry)).toEqual(
-      JSON.stringify(data)
-    );
-  });
+    test('saveAll', () => {
+      utils.data.saveAll(data);
+      expect(localStorage.getItem(props.site.lsEntry)).toEqual(
+        JSON.stringify(data)
+      );
+    });
 
-  test('clearAllFromLS', () => {
-    localStorage.setItem(props.site.lsEntry, JSON.stringify(data));
-    expect(localStorage.getItem(props.site.lsEntry)).toEqual(
-      JSON.stringify(data)
-    );
-    utils.clearAllFromLS();
-    expect(localStorage.getItem(props.site.lsEntry)).toEqual(null);
+    test('clearAll', () => {
+      localStorage.setItem(props.site.lsEntry, JSON.stringify(data));
+      expect(localStorage.getItem(props.site.lsEntry)).toEqual(
+        JSON.stringify(data)
+      );
+      utils.data.clearAll();
+      expect(localStorage.getItem(props.site.lsEntry)).toEqual(null);
+    });
   });
 });
