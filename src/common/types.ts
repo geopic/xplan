@@ -9,7 +9,15 @@
  */
 export type LsData = {
   theme: 'light' | 'dark';
-  data: SquareData[];
+  data: PlanData[];
+};
+
+/**
+ * Data for a plan (or goal).
+ */
+export type PlanData = {
+  plan: string;
+  squares: SquareData[];
 };
 
 /**
@@ -18,5 +26,5 @@ export type LsData = {
 export type SquareData = {
   date: Date;
   isCompleted: boolean;
-  notes: string;
+  notes: string | null;
 };
