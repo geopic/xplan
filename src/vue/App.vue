@@ -23,29 +23,29 @@ export default class App extends Vue {
     document.title = this.$store.state.siteName;
 
     // Initialise data object in localStorage if it does not exist
-    if (!utils.loadAllDataFromLS()) {
-      utils.initLS();
+    if (!utils.data.loadAll()) {
+      utils.data.init();
     }
 
-    if (utils.loadAllDataFromLS()?.theme === 'dark') {
+    if (utils.data.loadAll()?.theme === 'dark') {
       this.$el.classList.remove('theme-light');
       this.$el.classList.add('theme-dark');
     }
   }
 
   toggleTheme() {
-    const data = utils.loadAllDataFromLS() as LsData;
+    const data = utils.data.loadAll() as LsData;
 
     if (this.$el.classList.contains('theme-light')) {
       this.$el.classList.remove('theme-light');
       this.$el.classList.add('theme-dark');
       data.theme = 'dark';
-      utils.saveAllToLS(data);
+      utils.data.saveAll(data);
     } else if (this.$el.classList.contains('theme-dark')) {
       this.$el.classList.remove('theme-dark');
       this.$el.classList.add('theme-light');
       data.theme = 'light';
-      utils.saveAllToLS(data);
+      utils.data.saveAll(data);
     }
   }
 }

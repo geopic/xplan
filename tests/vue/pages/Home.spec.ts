@@ -1,10 +1,19 @@
 import { shallowMount } from '@vue/test-utils';
 import Home from '@/vue/pages/Home.vue';
-
-const vm = shallowMount(Home);
+import { PlanData } from '@/common/types';
 
 describe('Home', () => {
-  test('renders a div', () => {
-    expect(() => vm.get('div')).not.toThrow();
+  describe('no data exists', () => {
+    const vm = shallowMount(Home, { propsData: { data: [] } });
+
+    test('renders an intro element', () => {
+      expect(() => vm.get('#site-intro')).not.toThrow();
+    });
+
+    test('renders a form', () => {
+      expect(() => vm.get('form')).not.toThrow();
+    });
   });
+
+  describe('data exists', () => {});
 });

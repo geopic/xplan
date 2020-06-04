@@ -37,7 +37,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import utils from '@/common/utils';
-import { PlanData, SquareData } from '@/common/types';
+import { PlanData } from '@/common/types';
 import { addDays } from 'date-fns';
 
 @Component
@@ -46,7 +46,7 @@ export default class Home extends Vue {
   data: PlanData[] = [];
 
   created() {
-    this.data = utils.loadAllDataFromLS()?.data as PlanData[];
+    this.data = (utils.data.loadAll()?.data as PlanData[]) || [];
   }
 
   handleCreatePlanForm(e: Event) {
@@ -73,6 +73,9 @@ export default class Home extends Vue {
     }
 
     this.data.push(data);
+
+    // TODO: finalise localStorage data structure
+    // utils.data.saveAll(data);
   }
 }
 </script>
