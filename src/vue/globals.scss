@@ -31,6 +31,22 @@ a {
   text-decoration: none;
 }
 
+button {
+  background-color: inherit;
+  border: 2px solid var(--accent);
+  border-radius: 5px;
+  color: inherit;
+  cursor: pointer;
+  padding: 8px 20px;
+  transition: all 250ms;
+
+  &:hover,
+  &:active {
+    box-shadow: 3px 3px 3px var(--accent);
+    padding-left: 21px;
+  }
+}
+
 label {
   font-weight: bold;
 }

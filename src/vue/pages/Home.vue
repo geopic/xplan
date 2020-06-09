@@ -1,6 +1,20 @@
 <template>
   <div id="home">
-    <template v-if="data.length > 0">This is the home page.</template>
+    <template v-if="data.length > 0"
+      ><div class="plan-box" v-for="entry of data" :key="entry.id">
+        <h1>{{ entry.plan }}</h1>
+        <div class="plan-squares-box">
+          <div
+            class="plan-squares"
+            v-for="square of entry.squares"
+            :key="entry.squares.indexOf(square)"
+          ></div>
+        </div>
+      </div>
+      <button type="button" id="site-delete-all" @click="deleteAllData">
+        Clear data
+      </button></template
+    >
     <!--<template v-else-if="serverError">{{
       process.env.NODE_ENV === 'development'
         ? serverError
@@ -37,8 +51,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import utils from '@/common/utils';
-import { PlanData } from '@/common/types';
+import { PlanData, LsData } from '@/common/types';
 import { addDays } from 'date-fns';
+import { v4 as uuid } from 'uuid';
 
 @Component
 export default class Home extends Vue {
@@ -46,38 +61,53 @@ export default class Home extends Vue {
   data: PlanData[] = [];
 
   created() {
-    this.data = (utils.data.loadAll()?.data as PlanData[]) || [];
+    this.data = (utils.data.loadAll()?.plans as PlanData[]) || [];
+  }
+
+  deleteAllData() {
+    if (window.confirm('Are you sure you wish to delete all site data?')) {
+      utils.data.clearAll();
+      this.data = [];
+    }
   }
 
   handleCreatePlanForm(e: Event) {
     const targ = e.target as HTMLFormElement;
-    const data: PlanData = {
+    const data = utils.data.loadAll() as LsData;
+    const plan: PlanData = {
+      id: uuid(),
       plan:
         (targ.querySelector('#plan-name') as HTMLInputElement).value ||
         'Think up a plan',
-      squares: []
+      squares: [
+        { id: uuid(), date: new Date(), isCompleted: false, notes: null }
+      ]
     };
-
-    data.squares.push({ date: new Date(), isCompleted: false, notes: null });
 
     for (
       let i = 1;
       i <= +(targ.querySelector('#plan-days') as HTMLInputElement).value;
       i++
     ) {
-      data.squares.push({
+      plan.squares.push({
+        id: uuid(),
         date: addDays(new Date(), i),
         isCompleted: false,
         notes: null
       });
     }
 
-    this.data.push(data);
+    // Update UI
+    this.data.push(plan);
 
-    // TODO: finalise localStorage data structure
-    // utils.data.saveAll(data);
+    // Update persistent storage
+    data.plans.push(plan);
+    utils.data.saveAll(data);
   }
 }
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+#home {
+}
+</style>

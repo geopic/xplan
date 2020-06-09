@@ -6,8 +6,10 @@
     </header>
     <main><router-view /></main>
     <footer>
-      &copy; George Pickering 2020 |
-      <a href="https://github.com/geopic/xplan">GitHub repo</a>
+      <div id="site-credits">
+        &copy; George Pickering 2020 |
+        <a href="https://github.com/geopic/xplan">GitHub repo</a>
+      </div>
     </footer>
   </div>
 </template>
@@ -21,11 +23,6 @@ import { LsData } from '../common/types';
 export default class App extends Vue {
   mounted() {
     document.title = this.$store.state.siteName;
-
-    // Initialise data object in localStorage if it does not exist
-    if (!utils.data.loadAll()) {
-      utils.data.init();
-    }
 
     if (utils.data.loadAll()?.theme === 'dark') {
       this.$el.classList.remove('theme-light');
@@ -86,10 +83,12 @@ export default class App extends Vue {
   }
 
   footer {
-    align-items: center;
-    display: flex;
-    font-size: 90%;
-    justify-content: center;
+    #site-credits {
+      align-items: center;
+      display: flex;
+      font-size: 90%;
+      justify-content: center;
+    }
   }
 }
 </style>

@@ -6,15 +6,7 @@ describe('utils', () => {
   describe('data methods', () => {
     beforeEach(() => localStorage.clear());
 
-    const data: LsData = { theme: 'light', data: [] };
-
-    test('init', () => {
-      expect(localStorage.getItem(props.site.lsEntry)).toBe(null);
-      utils.data.init();
-      expect(localStorage.getItem(props.site.lsEntry)).toEqual(
-        JSON.stringify(data)
-      );
-    });
+    const data: LsData = { theme: 'light', plans: [] };
 
     test('loadAll', () => {
       expect(utils.data.loadAll()).toEqual(null);

@@ -9,13 +9,14 @@
  */
 export type LsData = {
   theme: 'light' | 'dark';
-  data: PlanData[];
+  plans: PlanData[];
 };
 
 /**
  * Data for a plan (or goal).
  */
 export type PlanData = {
+  id: string; // uuid format
   plan: string;
   squares: SquareData[];
 };
@@ -24,6 +25,7 @@ export type PlanData = {
  * Data for each square which represents a day.
  */
 export type SquareData = {
+  id: string; // uuid format
   date: Date;
   isCompleted: boolean;
   notes: string | null;

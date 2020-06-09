@@ -10,19 +10,16 @@ import { LsData } from '@/common/types';
 export default {
   data: {
     /**
-     * Initialise localStorage entry with default data object.
-     */
-    init(): void {
-      const data: LsData = { theme: 'light', data: [] };
-      localStorage.setItem(props.site.lsEntry, JSON.stringify(data));
-    },
-
-    /**
      * Get all data from localStorage.
      * @returns The data from localStorage, or null if no entry exists.
      */
     loadAll(): LsData | null {
-      return JSON.parse(localStorage.getItem(props.site.lsEntry) as string);
+      return (
+        JSON.parse(localStorage.getItem(props.site.lsEntry) as string) || {
+          theme: 'light',
+          plans: []
+        }
+      );
     },
 
     /**
