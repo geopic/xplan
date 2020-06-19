@@ -14,12 +14,7 @@ export default {
      * @returns The data from localStorage, or null if no entry exists.
      */
     loadAll(): LsData | null {
-      return (
-        JSON.parse(localStorage.getItem(props.site.lsEntry) as string) || {
-          theme: 'light',
-          plans: []
-        }
-      );
+      return JSON.parse(localStorage.getItem(props.site.lsEntry) as string);
     },
 
     /**

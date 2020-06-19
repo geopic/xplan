@@ -18,6 +18,7 @@ export type LsData = {
 export type PlanData = {
   id: string; // uuid format
   plan: string;
+  isUnlimited: boolean;
   squares: SquareData[];
 };
 
