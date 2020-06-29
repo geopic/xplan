@@ -31,7 +31,7 @@ export default class App extends Vue {
   }
 
   toggleTheme() {
-    const data = utils.data.loadAll() as LsData;
+    const data = utils.data.loadAll() || ({} as LsData);
 
     if (this.$el.classList.contains('theme-light')) {
       this.$el.classList.remove('theme-light');
@@ -52,7 +52,6 @@ export default class App extends Vue {
 #app {
   align-items: center;
   background-color: var(--bgColor);
-  box-sizing: border-box;
   color: var(--color);
   display: grid;
   grid-template-rows: 50px auto 50px;
@@ -75,10 +74,14 @@ export default class App extends Vue {
     }
 
     #site-theme-switcher {
-      border-bottom: 1px dotted var(--accent);
       cursor: pointer;
       padding: 8px;
       user-select: none;
+
+      &:hover,
+      &:active {
+        border-bottom: 1px dotted var(--accent);
+      }
     }
   }
 

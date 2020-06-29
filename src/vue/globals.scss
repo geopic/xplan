@@ -16,12 +16,14 @@ $medquery-min-width-05: 1860px;
 
 .theme-light {
   --bgColor: #fafafa;
+  --bgColorAlt: #eee;
   --color: #222;
   --accent: #0085dd;
 }
 
 .theme-dark {
   --bgColor: #222;
+  --bgColorAlt: #333;
   --color: #fafafa;
   --accent: #ffa034;
 }
@@ -29,6 +31,21 @@ $medquery-min-width-05: 1860px;
 a {
   color: var(--accent);
   text-decoration: none;
+}
+
+body {
+  font-size: 13px;
+  line-height: 1.4rem;
+
+  @media all and (min-width: $medquery-min-width-01) {
+    font-size: 110%;
+    line-height: 150%;
+  }
+
+  @media all and (min-width: $medquery-min-width-03) {
+    font-size: 125%;
+    line-height: 200%;
+  }
 }
 
 button {
@@ -47,6 +64,36 @@ button {
   }
 }
 
+h1,
+h2 {
+  border-bottom: 2px solid var(--accent);
+  font-size: 120%;
+  margin: 5px auto;
+  padding-bottom: 8px;
+  text-align: center;
+  width: 200px;
+
+  @media all and (min-width: $medquery-min-width-01) {
+    padding-bottom: 10px;
+    width: 280px;
+  }
+}
+
 label {
   font-weight: bold;
+}
+
+input {
+  background-color: inherit;
+  border: 2px dotted transparent;
+  border-bottom: 2px dotted var(--accent);
+  color: inherit;
+  font-size: 110%;
+  padding: 8px;
+  transition: all 100ms;
+
+  &:hover,
+  &:active {
+    border-color: var(--accent);
+  }
 }
