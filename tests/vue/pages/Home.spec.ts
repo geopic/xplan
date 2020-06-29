@@ -14,25 +14,37 @@ describe('Home', () => {
     test('renders a form', () => {
       expect(() => vm.get('form')).not.toThrow();
     });
+
+    test('does not attempt to render any data', () => {
+      expect(() => vm.get('.plan-square')).toThrow();
+    });
   });
 
-  describe('data exists', () => {
-    const d: PlanData = {
-      id: uuid(),
-      plan: 'Write unit tests',
-      squares: [
-        {
-          id: uuid(),
-          date: new Date(),
-          isCompleted: false,
-          notes: null
-        }
-      ]
-    };
-    const vm = shallowMount(Home, { propsData: { data: d } });
+  describe.skip('data exists', () => {
+    describe('unlimited number of days', () => {
+      const d: PlanData = {
+        id: uuid(),
+        plan: 'Write unit tests',
+        isUnlimited: false,
+        squares: [
+          {
+            id: uuid(),
+            date: new Date(),
+            isCompleted: false,
+            notes: null
+          }
+        ]
+      };
 
-    test('renders a square', () => {
-      expect(() => vm.get('.plan-square')).not.toThrow();
+      const vm = shallowMount(Home, { propsData: { data: d } });
+
+      test('renders one square', () => {
+        expect(() => vm.get('.plan-square')).not.toThrow();
+      });
+
+      test('renders "unlimited" marker', () => {});
     });
+
+    describe('non-unlimited number of days', () => {});
   });
 });
