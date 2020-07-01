@@ -1,13 +1,13 @@
 <template>
   <div id="home">
-    <section id="site-main" v-if="data.length > 0">
-      <div class="plan-box" v-for="entry of data" :key="entry.id">
-        <h1>{{ entry.plan }}</h1>
+    <section id="site-main" v-if="plans.length > 0">
+      <div class="plan-box" v-for="plan of plans" :key="plan.id">
+        <h1>{{ plan.title }}</h1>
         <div class="plan-squares-box">
           <div
             class="plan-squares"
-            v-for="square of entry.squares"
-            :key="entry.squares.indexOf(square)"
+            v-for="square of plan.squares"
+            :key="square.id"
           >
             {{ formattedDate(square.date) }}
           </div>
@@ -17,7 +17,7 @@
         Clear data
       </button>
     </section>
-    <template v-else-if="data.length === 0">
+    <template v-else-if="plans.length === 0">
       <section id="site-intro">
         <h1>Welcome!</h1>
         It looks like this is your first time on the site. If you are unfamiliar
@@ -55,16 +55,15 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import utils from '@/common/utils';
-import { PlanData, LsData } from '@/common/types';
-import { addDays, format } from 'date-fns';
-import { v4 as uuid } from 'uuid';
+import { PlanData } from '@/common/types';
+import { format } from 'date-fns';
 
 @Component
 export default class Home extends Vue {
-  data: PlanData[] = [];
+  plans: PlanData[] = [];
 
   created() {
-    this.data = (utils.data.loadAll()?.plans as PlanData[]) || [];
+    this.plans = (utils.storage.loadAll()?.plans as PlanData[]) || [];
   }
 
   formattedDate(date: string) {
@@ -73,45 +72,25 @@ export default class Home extends Vue {
 
   deleteAllData() {
     if (window.confirm('Are you sure you wish to delete all site data?')) {
-      utils.data.clearAll();
-      this.data = [];
+      utils.storage.clearAll();
+      this.plans = [];
     }
   }
 
   handleCreatePlanForm(e: Event) {
     const targ = e.target as HTMLFormElement;
-    const data = utils.data.loadAll() || ({} as LsData);
-    const plan: PlanData = {
-      id: uuid(),
-      plan:
-        (targ.querySelector('#plan-name') as HTMLInputElement).value ||
-        'Think up a plan',
-      isUnlimited:
-        +(targ.querySelector('#plan-days') as HTMLInputElement).value === 0,
-      squares: [
-        { id: uuid(), date: new Date(), isCompleted: false, notes: null }
-      ]
-    };
-
-    for (
-      let i = 1;
-      i < +(targ.querySelector('#plan-days') as HTMLInputElement).value;
-      i++
-    ) {
-      plan.squares.push({
-        id: uuid(),
-        date: addDays(new Date(), i),
-        isCompleted: false,
-        notes: null
-      });
-    }
+    const newPlan = utils.plans.initNewPlan(
+      (targ.querySelector('#plan-name') as HTMLInputElement).value,
+      +(targ.querySelector('#plan-days') as HTMLInputElement).value
+    );
 
     // Update UI
-    this.data.push(plan);
+    this.plans.push(newPlan);
 
     // Update persistent storage
-    data.plans.push(plan);
-    utils.data.saveAll(data);
+    const data = utils.storage.loadAll() || utils.storage.default;
+    data.plans.push(newPlan);
+    utils.storage.saveAll(data);
   }
 }
 </script>

@@ -5,26 +5,26 @@ import { v4 as uuid } from 'uuid';
 
 describe('Home', () => {
   describe('no data exists', () => {
-    const vm = shallowMount(Home, { propsData: { data: [] } });
+    const wrapper = shallowMount(Home, { propsData: { data: [] } });
 
     test('renders an intro element', () => {
-      expect(() => vm.get('#site-intro')).not.toThrow();
+      expect(() => wrapper.get('#site-intro')).not.toThrow();
     });
 
     test('renders a form', () => {
-      expect(() => vm.get('form')).not.toThrow();
+      expect(() => wrapper.get('form')).not.toThrow();
     });
 
     test('does not attempt to render any data', () => {
-      expect(() => vm.get('.plan-square')).toThrow();
+      expect(() => wrapper.get('.plan-square')).toThrow();
     });
   });
 
   describe.skip('data exists', () => {
     describe('unlimited number of days', () => {
-      const d: PlanData = {
+      const plan: PlanData = {
         id: uuid(),
-        plan: 'Write unit tests',
+        title: 'Write unit tests',
         isUnlimited: false,
         squares: [
           {
@@ -36,13 +36,13 @@ describe('Home', () => {
         ]
       };
 
-      const vm = shallowMount(Home, { propsData: { data: d } });
+      const wrapper = shallowMount(Home, { propsData: { plans: [plan] } });
 
       test('renders one square', () => {
-        expect(() => vm.get('.plan-square')).not.toThrow();
+        expect(() => wrapper.get('.plan-square')).not.toThrow();
       });
 
-      test('renders "unlimited" marker', () => {});
+      test("renders 'unlimited' marker", () => {});
     });
 
     describe('non-unlimited number of days', () => {});

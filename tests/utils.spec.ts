@@ -1,21 +1,33 @@
 import props from '@/common/props';
-import { LsData } from '@/common/types';
 import utils from '@/common/utils';
 
 describe('utils', () => {
-  describe('data methods', () => {
+  describe("'plans' methods", () => {
+    describe('initNewPlan', () => {
+      test('creates a title when no title is passed in as an argument', () => {
+        expect(utils.plans.initNewPlan('', 0).title.length).toBeGreaterThan(0);
+      });
+
+      test('is unlimited when no. of days is zero, otherwise is not', () => {
+        expect(utils.plans.initNewPlan('', 0).isUnlimited).toBe(true);
+        expect(utils.plans.initNewPlan('', 7).isUnlimited).toBe(false);
+      });
+    });
+  });
+
+  describe("'storage' methods", () => {
     beforeEach(() => localStorage.clear());
 
-    const data: LsData = { theme: 'light', plans: [] };
+    const data = utils.storage.default;
 
     test('loadAll', () => {
-      expect(utils.data.loadAll()).toEqual(null);
+      expect(utils.storage.loadAll()).toEqual(null);
       localStorage.setItem(props.site.lsEntry, JSON.stringify(data));
-      expect(utils.data.loadAll()).toEqual(data);
+      expect(utils.storage.loadAll()).toEqual(data);
     });
 
     test('saveAll', () => {
-      utils.data.saveAll(data);
+      utils.storage.saveAll(data);
       expect(localStorage.getItem(props.site.lsEntry)).toEqual(
         JSON.stringify(data)
       );
@@ -26,7 +38,7 @@ describe('utils', () => {
       expect(localStorage.getItem(props.site.lsEntry)).toEqual(
         JSON.stringify(data)
       );
-      utils.data.clearAll();
+      utils.storage.clearAll();
       expect(localStorage.getItem(props.site.lsEntry)).toEqual(null);
     });
   });
