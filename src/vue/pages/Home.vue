@@ -4,13 +4,11 @@
       <div class="plan-box" v-for="plan of plans" :key="plan.id">
         <h1>{{ plan.title }}</h1>
         <div class="plan-squares-box">
-          <div
-            class="plan-squares"
+          <PlanSquare
             v-for="square of plan.squares"
+            v-bind="square"
             :key="square.id"
-          >
-            {{ formattedDate(square.date) }}
-          </div>
+          />
         </div>
       </div>
       <button type="button" id="site-delete-all" @click="deleteAllData">
@@ -56,18 +54,18 @@
 import { Component, Vue } from 'vue-property-decorator';
 import utils from '@/common/utils';
 import { PlanData } from '@/common/types';
-import { format } from 'date-fns';
+import PlanSquare from '@/vue/components/PlanSquare.vue';
 
-@Component
+@Component({
+  components: {
+    PlanSquare
+  }
+})
 export default class Home extends Vue {
   plans: PlanData[] = [];
 
   created() {
     this.plans = (utils.storage.loadAll()?.plans as PlanData[]) || [];
-  }
-
-  formattedDate(date: string) {
-    return format(new Date(date), 'yyyy-MM-dd');
   }
 
   deleteAllData() {
@@ -99,6 +97,30 @@ export default class Home extends Vue {
 #home {
   section {
     padding: 5px;
+  }
+
+  #site-main {
+    .plan-box {
+      .plan-squares-box {
+        align-items: flex-start;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 5px;
+      }
+    }
+
+    #site-delete-all {
+      display: block;
+      margin: 5px auto;
+      width: 200px;
+    }
+
+    @media all and (min-width: $medquery-min-width-01) {
+      #site-delete-all {
+        width: 300px;
+      }
+    }
   }
 
   #site-intro {
