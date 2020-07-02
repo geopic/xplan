@@ -20,28 +20,28 @@ import utils from '@/common/utils';
 
 @Component
 export default class App extends Vue {
-  siteData = utils.storage.loadAll() || utils.storage.default;
-
   mounted() {
     document.title = this.$store.state.siteName;
 
-    if (this.siteData.theme === 'dark') {
+    if (utils.storage.loadAll()?.theme === 'dark') {
       this.$el.classList.remove('theme-light');
       this.$el.classList.add('theme-dark');
     }
   }
 
   toggleTheme() {
+    const data = utils.storage.loadAll() || utils.storage.default;
+
     if (this.$el.classList.contains('theme-light')) {
       this.$el.classList.remove('theme-light');
       this.$el.classList.add('theme-dark');
-      this.siteData.theme = 'dark';
-      utils.storage.saveAll(this.siteData);
+      data.theme = 'dark';
+      utils.storage.saveAll(data);
     } else if (this.$el.classList.contains('theme-dark')) {
       this.$el.classList.remove('theme-dark');
       this.$el.classList.add('theme-light');
-      this.siteData.theme = 'light';
-      utils.storage.saveAll(this.siteData);
+      data.theme = 'light';
+      utils.storage.saveAll(data);
     }
   }
 }
