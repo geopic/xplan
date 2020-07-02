@@ -19,6 +19,7 @@ $medquery-min-width-05: 1860px;
   --bgColorAlt: #eee;
   --color: #222;
   --accent: #0085dd;
+  --accentAlt: #002385;
 }
 
 .theme-dark {
@@ -26,6 +27,7 @@ $medquery-min-width-05: 1860px;
   --bgColorAlt: #333;
   --color: #fafafa;
   --accent: #ffa034;
+  --accentAlt: #c26904;
 }
 
 a {
@@ -85,15 +87,9 @@ label {
 
 input {
   background-color: inherit;
-  border: 2px dotted transparent;
-  border-bottom: 2px dotted var(--accent);
+  border: 0px;
+  border-bottom: 2px dotted var(--accentAlt);
   color: inherit;
   font-size: 110%;
   padding: 8px;
-  transition: all 100ms;
-
-  &:hover,
-  &:active {
-    border-color: var(--accent);
-  }
 }

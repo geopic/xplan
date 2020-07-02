@@ -17,32 +17,31 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import utils from '@/common/utils';
-import { LsData } from '../common/types';
 
 @Component
 export default class App extends Vue {
+  siteData = utils.storage.loadAll() || utils.storage.default;
+
   mounted() {
     document.title = this.$store.state.siteName;
 
-    if (utils.data.loadAll()?.theme === 'dark') {
+    if (this.siteData.theme === 'dark') {
       this.$el.classList.remove('theme-light');
       this.$el.classList.add('theme-dark');
     }
   }
 
   toggleTheme() {
-    const data = utils.data.loadAll() || ({} as LsData);
-
     if (this.$el.classList.contains('theme-light')) {
       this.$el.classList.remove('theme-light');
       this.$el.classList.add('theme-dark');
-      data.theme = 'dark';
-      utils.data.saveAll(data);
+      this.siteData.theme = 'dark';
+      utils.storage.saveAll(this.siteData);
     } else if (this.$el.classList.contains('theme-dark')) {
       this.$el.classList.remove('theme-dark');
       this.$el.classList.add('theme-light');
-      data.theme = 'light';
-      utils.data.saveAll(data);
+      this.siteData.theme = 'light';
+      utils.storage.saveAll(this.siteData);
     }
   }
 }
