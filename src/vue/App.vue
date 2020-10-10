@@ -53,18 +53,18 @@ export default class App extends Vue {
   background-color: var(--bgColor);
   color: var(--color);
   display: grid;
-  grid-template-rows: 50px auto 50px;
-  height: 100vh;
+  grid-template-rows: 60px auto 50px;
+  height: 100%;
   justify-content: center;
   transition: all 250ms;
 
   & > * {
-    height: 100%;
     width: 100vw;
   }
 
   header {
     align-items: center;
+    align-self: center;
     display: flex;
     justify-content: space-evenly;
 
@@ -82,6 +82,10 @@ export default class App extends Vue {
         border-bottom: 1px dotted var(--accent);
       }
     }
+  }
+
+  main {
+    align-self: flex-start;
   }
 
   footer {

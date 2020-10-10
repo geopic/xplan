@@ -37,6 +37,7 @@ a {
 
 body {
   font-size: 13px;
+  height: 100vh;
   line-height: 1.4rem;
 
   @media all and (min-width: $medquery-min-width-01) {
@@ -59,10 +60,12 @@ button {
   padding: 8px 20px;
   transition: all 250ms;
 
-  &:hover,
-  &:active {
-    box-shadow: 3px 3px 3px var(--accent);
-    padding-left: 21px;
+  &.btn-important {
+    &:hover,
+    &:active {
+      box-shadow: 3px 3px 3px var(--accent);
+      padding-left: 21px;
+    }
   }
 }
 
@@ -86,10 +89,10 @@ label {
 }
 
 input {
-  background-color: inherit;
-  border: 0px;
-  border-bottom: 2px dotted var(--accentAlt);
+  background-color: var(--bgColor);
+  border: 2px dotted var(--accent);
+  border-radius: 5px;
   color: inherit;
-  font-size: 110%;
-  padding: 8px;
+  font-size: 120%;
+  padding: 8px 12px;
 }

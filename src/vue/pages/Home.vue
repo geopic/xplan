@@ -31,9 +31,23 @@
           <input type="text" name="plan-name" id="plan-name" />
         </div>
         <div class="form-section">
-          <label for="plan-days"
-            >Number of days for plan<br />(leave at 0 for unlimited)</label
-          ><input
+          <label for="plan-days">Number of days for plan</label>
+          <div id="plan-days-preset-box" @click="handlePresetChoiceSelect">
+            <div id="plan-days-preset-box-zero">
+              <button type="button">0 (continuous)</button>
+            </div>
+            <div id="plan-days-preset-box-non-zero">
+              <button
+                type="button"
+                class="plan-days-preset"
+                v-for="presetChoice of presetDaysChoices"
+                :key="presetDaysChoices.indexOf(presetChoice)"
+              >
+                {{ presetChoice }}
+              </button>
+            </div>
+          </div>
+          <input
             type="number"
             name="plan-days"
             id="plan-days"
@@ -42,7 +56,9 @@
           />
         </div>
         <div class="form-section">
-          <button type="submit" id="plan-submit-btn">Submit</button>
+          <button type="submit" class="btn-important" id="plan-submit-btn">
+            Submit
+          </button>
         </div>
       </form>
     </template>
@@ -63,6 +79,7 @@ import PlanSquare from '@/vue/components/PlanSquare.vue';
 })
 export default class Home extends Vue {
   plans: PlanData[] = [];
+  presetDaysChoices = [7, 14, 21, 28];
 
   created() {
     this.plans = (utils.storage.loadAll()?.plans as PlanData[]) || [];
@@ -73,6 +90,19 @@ export default class Home extends Vue {
       utils.storage.clearAll();
       this.plans = [];
     }
+  }
+
+  handlePresetChoiceSelect(e: Event) {
+    const targ = e.target as HTMLButtonElement;
+    if (targ.nodeName !== 'BUTTON') {
+      return;
+    }
+
+    (document.getElementById(
+      'plan-days'
+    ) as HTMLInputElement).value = (targ.textContent as string).match(
+      /\d+/
+    )![0];
   }
 
   handleCreatePlanForm(e: Event) {
@@ -138,14 +168,50 @@ export default class Home extends Vue {
       margin: 10px 0px;
 
       label {
-        margin-bottom: 5px;
+        margin-bottom: 10px;
         text-align: center;
+      }
+    }
+
+    #plan-days-preset-box {
+      & > * {
+        align-items: center;
+        display: flex;
+        justify-content: space-evenly;
+        margin-bottom: 10px;
+
+        button {
+          &:active,
+          &:hover {
+            font-weight: bold;
+          }
+        }
+      }
+
+      #plan-days-preset-box-zero {
+        button {
+          width: 200px;
+        }
+      }
+
+      #plan-days-preset-box-non-zero {
+        button {
+          width: 80px;
+        }
+
+        @media all and (min-width: $medquery-min-width-01) {
+          button {
+            width: 100px;
+          }
+        }
       }
     }
 
     @media all and (min-width: $medquery-min-width-01) {
       background-color: var(--bgColorAlt);
-      margin: 15px auto;
+      border: 1px solid var(--accentAlt);
+      border-radius: 3px;
+      margin: 20px auto;
       padding: 10px 20px;
       width: $medquery-min-width-01;
     }
