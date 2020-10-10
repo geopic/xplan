@@ -8,7 +8,21 @@
  * localStorage data.
  */
 export type LsData = {
+  /**
+   * Site theme.
+   */
   theme: 'light' | 'dark';
+
+  /**
+   * Date format, to be processed by date-fns.
+   *
+   * https://date-fns.org/docs/format
+   */
+  dateFormat: string;
+
+  /**
+   * One or multiple plans set by the user.
+   */
   plans: PlanData[];
 };
 

@@ -1,8 +1,22 @@
 <template>
   <div id="home">
-    <section id="site-main" v-if="plans.length > 0">
-      <div class="plan-box" v-for="plan of plans" :key="plan.id">
-        <h1>{{ plan.title }}</h1>
+    <section id="site-main" v-if="lsData.plans.length > 0">
+      <div class="plan-box" v-for="plan of lsData.plans" :key="plan.id">
+        <div class="plan-title-box" @click="hideTitleShowForm">
+          <h1>{{ plan.title }}</h1>
+          <form
+            style="display: none;"
+            @submit.prevent="amendPlanTitle"
+            :data-planId="plan.id"
+          >
+            <input
+              type="text"
+              :value="plan.title"
+              :maxlength="planNameMaxLength"
+            />
+            <button type="submit">✅</button>
+          </form>
+        </div>
         <div class="plan-squares-box">
           <PlanSquare
             v-for="square of plan.squares"
@@ -15,7 +29,7 @@
         Clear data
       </button>
     </section>
-    <template v-else-if="plans.length === 0">
+    <template v-else-if="lsData.plans.length === 0">
       <section id="site-intro">
         <h1>Welcome!</h1>
         It looks like this is your first time on the site. If you are unfamiliar
@@ -28,7 +42,12 @@
         <h1>Create new plan</h1>
         <div class="form-section">
           <label for="plan-name">Plan name</label>
-          <input type="text" name="plan-name" id="plan-name" />
+          <input
+            type="text"
+            name="plan-name"
+            id="plan-name"
+            :maxlength="planNameMaxLength"
+          />
         </div>
         <div class="form-section">
           <label for="plan-days">Number of days for plan</label>
@@ -69,7 +88,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import utils from '@/common/utils';
-import { PlanData } from '@/common/types';
+import { LsData, PlanData } from '@/common/types';
 import PlanSquare from '@/vue/components/PlanSquare.vue';
 
 @Component({
@@ -78,17 +97,42 @@ import PlanSquare from '@/vue/components/PlanSquare.vue';
   }
 })
 export default class Home extends Vue {
-  plans: PlanData[] = [];
+  lsData: LsData = utils.storage.loadAll() || utils.storage.default;
   presetDaysChoices = [7, 14, 21, 28];
+  planNameMaxLength = 36;
 
-  created() {
-    this.plans = (utils.storage.loadAll()?.plans as PlanData[]) || [];
+  hideTitleShowForm(e: Event) {
+    const targ = e.target as HTMLElement;
+
+    if (targ.nodeName !== 'H1') {
+      return;
+    }
+
+    targ.style.display = 'none';
+    (targ.parentElement as HTMLElement).querySelector('form')!.style.display =
+      'block';
+  }
+
+  amendPlanTitle(e: Event) {
+    const targ = e.target as HTMLFormElement;
+
+    for (const plan of this.lsData.plans) {
+      if (plan.id === targ.dataset.planid) {
+        plan.title = (targ.querySelector('input') as HTMLInputElement).value;
+      }
+    }
+
+    utils.storage.saveAll(this.lsData);
+
+    targ.style.display = 'none';
+    (targ.parentElement as HTMLElement).querySelector('h1')!.style.display =
+      'block';
   }
 
   deleteAllData() {
     if (window.confirm('Are you sure you wish to delete all site data?')) {
       utils.storage.clearAll();
-      this.plans = [];
+      this.lsData = utils.storage.default;
     }
   }
 
@@ -113,12 +157,10 @@ export default class Home extends Vue {
     );
 
     // Update UI
-    this.plans.push(newPlan);
+    this.lsData.plans.push(newPlan);
 
     // Update persistent storage
-    const data = utils.storage.loadAll() || utils.storage.default;
-    data.plans.push(newPlan);
-    utils.storage.saveAll(data);
+    utils.storage.saveAll(this.lsData);
   }
 }
 </script>
@@ -131,6 +173,23 @@ export default class Home extends Vue {
 
   #site-main {
     .plan-box {
+      .plan-title-box {
+        align-items: flex-start;
+        display: flex;
+        height: 40px;
+        justify-content: center;
+
+        h1 {
+          cursor: pointer;
+        }
+
+        form {
+          & > * {
+            margin: 0px 5px;
+          }
+        }
+      }
+
       .plan-squares-box {
         align-items: flex-start;
         display: flex;
@@ -147,8 +206,22 @@ export default class Home extends Vue {
     }
 
     @media all and (min-width: $medquery-min-width-01) {
+      .plan-box {
+        .plan-title-box {
+          height: 60px;
+        }
+      }
+
       #site-delete-all {
         width: 300px;
+      }
+    }
+
+    @media all and (min-width: $medquery-min-width-03) {
+      .plan-box {
+        .plan-title-box {
+          height: 80px;
+        }
       }
     }
   }

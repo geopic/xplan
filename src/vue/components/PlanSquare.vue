@@ -7,11 +7,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { format } from 'date-fns';
+import utils from '@/common/utils';
 
 @Component
 export default class PlanSquare extends Vue {
   formattedDate(date: string) {
-    return format(new Date(date), 'EEE do MMM');
+    return format(new Date(date), utils.storage.loadAll()!.dateFormat);
   }
 }
 </script>
