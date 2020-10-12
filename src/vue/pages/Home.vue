@@ -6,13 +6,13 @@
           <h1>{{ plan.title }}</h1>
           <form
             style="display: none;"
-            @submit.prevent="amendPlanTitle"
-            :data-planId="plan.id"
+            @submit.prevent="e => amendPlanTitle(e, plan)"
           >
             <input
               type="text"
               :value="plan.title"
               :maxlength="planNameMaxLength"
+              @blur="e => handleUnfocusFromForm(e, plan)"
             />
             <button type="submit">✅</button>
           </form>
@@ -99,26 +99,49 @@ import PlanSquare from '@/vue/components/PlanSquare.vue';
 export default class Home extends Vue {
   lsData: LsData = utils.storage.loadAll() || utils.storage.default;
   presetDaysChoices = [7, 14, 21, 28];
-  planNameMaxLength = 36;
+  planNameMaxLength = 24;
 
   hideTitleShowForm(e: Event) {
     const targ = e.target as HTMLElement;
+    const form = (targ.parentElement as HTMLElement).querySelector(
+      'form'
+    ) as HTMLFormElement;
 
     if (targ.nodeName !== 'H1') {
       return;
     }
 
     targ.style.display = 'none';
-    (targ.parentElement as HTMLElement).querySelector('form')!.style.display =
-      'block';
+
+    form.style.display = 'block';
+    form.querySelector('input')!.focus();
   }
 
-  amendPlanTitle(e: Event) {
+  /**
+   * Input field blur event handler.
+   */
+  handleUnfocusFromForm(e: Event, plan: PlanData) {
+    (document.querySelector(
+      '.plan-title-box > h1'
+    ) as HTMLElement).style.display = 'block';
+
+    (document.querySelector(
+      '.plan-title-box > form'
+    ) as HTMLFormElement).style.display = 'none';
+
+    (document.querySelector(
+      '.plan-title-box > form > input'
+    ) as HTMLInputElement).value = plan.title;
+  }
+
+  amendPlanTitle(e: Event, plan: PlanData) {
     const targ = e.target as HTMLFormElement;
 
-    for (const plan of this.lsData.plans) {
-      if (plan.id === targ.dataset.planid) {
-        plan.title = (targ.querySelector('input') as HTMLInputElement).value;
+    for (const savedPlan of this.lsData.plans) {
+      if (savedPlan.id === plan.id) {
+        savedPlan.title = (targ.querySelector(
+          'input'
+        ) as HTMLInputElement).value;
       }
     }
 
@@ -221,6 +244,10 @@ export default class Home extends Vue {
       .plan-box {
         .plan-title-box {
           height: 80px;
+
+          h1 {
+            width: 350px;
+          }
         }
       }
     }
