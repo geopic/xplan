@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="theme-light">
+  <div id="app">
     <header>
       <div id="site-title">{{ this.$store.state.siteName }}</div>
       <div id="site-theme-switcher" @click="toggleTheme">Switch theme</div>
@@ -22,24 +22,26 @@ import utils from '@/common/utils';
 export default class App extends Vue {
   mounted() {
     document.title = this.$store.state.siteName;
+    const bodyEl = this.$el.parentElement as HTMLElement;
 
     if (utils.storage.loadAll()?.theme === 'dark') {
-      this.$el.classList.remove('theme-light');
-      this.$el.classList.add('theme-dark');
+      bodyEl.classList.remove('theme-light');
+      bodyEl.classList.add('theme-dark');
     }
   }
 
   toggleTheme() {
     const data = utils.storage.loadAll() || utils.storage.default;
+    const bodyEl = this.$el.parentElement as HTMLElement;
 
-    if (this.$el.classList.contains('theme-light')) {
-      this.$el.classList.remove('theme-light');
-      this.$el.classList.add('theme-dark');
+    if (bodyEl.classList.contains('theme-light')) {
+      bodyEl.classList.remove('theme-light');
+      bodyEl.classList.add('theme-dark');
       data.theme = 'dark';
       utils.storage.saveAll(data);
-    } else if (this.$el.classList.contains('theme-dark')) {
-      this.$el.classList.remove('theme-dark');
-      this.$el.classList.add('theme-light');
+    } else if (bodyEl.classList.contains('theme-dark')) {
+      bodyEl.classList.remove('theme-dark');
+      bodyEl.classList.add('theme-light');
       data.theme = 'light';
       utils.storage.saveAll(data);
     }
@@ -50,17 +52,10 @@ export default class App extends Vue {
 <style lang="scss">
 #app {
   align-items: center;
-  background-color: var(--bgColor);
-  color: var(--color);
   display: grid;
   grid-template-rows: 60px auto 50px;
   height: 100%;
-  justify-content: center;
-  transition: all 250ms;
-
-  & > * {
-    width: 100vw;
-  }
+  justify-content: stretch;
 
   header {
     align-items: center;
@@ -79,7 +74,7 @@ export default class App extends Vue {
 
       &:hover,
       &:active {
-        border-bottom: 1px dotted var(--accent);
+        border-bottom: 1px dotted var(--accent0);
       }
     }
   }

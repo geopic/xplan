@@ -14,31 +14,43 @@ $medquery-min-width-03: 1020px;
 $medquery-min-width-04: 1400px;
 $medquery-min-width-05: 1860px;
 
+// Site themes, with CSS variables
+// Variables are named in order of preference, so 0 is the base, 1 is second-choice, etc
 .theme-light {
-  --bgColor: #fafafa;
-  --bgColorAlt: #eee;
-  --color: #222;
-  --accent: #0085dd;
-  --accentAlt: #002385;
+  --bgColor0: #fafafa;
+  --bgColor1: #eee;
+  --bgColor2: #d3d3d3;
+  --textColor0: #222;
+  --accent0: #0085dd;
+  --accent1: #002385;
+  --accent2: #000;
+  --accent3: #000;
 }
 
 .theme-dark {
-  --bgColor: #222;
-  --bgColorAlt: #333;
-  --color: #fafafa;
-  --accent: #ffa034;
-  --accentAlt: #c26904;
+  --bgColor0: #222;
+  --bgColor1: #333;
+  --bgColor2: #444;
+  --textColor0: #fafafa;
+  --accent0: #ffa034;
+  --accent1: #c26904;
+  --accent2: #834601;
+  --accent3: #000;
 }
 
 a {
-  color: var(--accent);
+  color: var(--accent1);
   text-decoration: none;
 }
 
 body {
+  background-color: var(--bgColor0);
+  color: var(--textColor0);
   font-size: 13px;
-  height: 100vh;
+  height: 100%;
   line-height: 1.4rem;
+  transition: background-color 250ms, border-color 250ms, color 250ms;
+  width: 100%;
 
   @media all and (min-width: $medquery-min-width-01) {
     font-size: 110%;
@@ -52,18 +64,16 @@ body {
 }
 
 button {
-  background-color: inherit;
-  border: 2px solid var(--accent);
-  border-radius: 5px;
-  color: inherit;
+  background-color: var(--bgColor1);
+  border: 2px solid var(--accent0);
+  color: var(--textColor0);
   cursor: pointer;
   padding: 8px 20px;
-  transition: all 250ms;
 
   &.btn-important {
     &:hover,
     &:active {
-      box-shadow: 3px 3px 3px var(--accent);
+      box-shadow: 3px 3px 3px var(--accent0);
       padding-left: 21px;
     }
   }
@@ -71,7 +81,7 @@ button {
 
 h1,
 h2 {
-  border-bottom: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent0);
   font-size: 120%;
   margin: 5px auto;
   padding-bottom: 8px;
@@ -89,8 +99,8 @@ label {
 }
 
 input {
-  background-color: var(--bgColor);
-  border: 2px dotted var(--accent);
+  background-color: var(--bgColor0);
+  border: 2px dotted var(--accent0);
   border-radius: 5px;
   color: inherit;
   font-size: 120%;
