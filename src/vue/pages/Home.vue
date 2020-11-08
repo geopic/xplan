@@ -6,13 +6,13 @@
           <h1>{{ plan.title }}</h1>
           <form
             style="display: none;"
-            @submit.prevent="e => amendPlanTitle(e, plan)"
+            :data-planId="plan.id"
+            @submit.prevent="amendPlanTitle"
           >
             <input
               type="text"
               :value="plan.title"
               :maxlength="planNameMaxLength"
-              @blur="e => handleUnfocusFromForm(e, plan)"
             />
             <button type="submit">✅</button>
           </form>
@@ -88,7 +88,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import utils from '@/common/utils';
-import { LsData, PlanData } from '@/common/types';
+import { LsData } from '@/common/types';
 import PlanSquare from '@/vue/components/PlanSquare.vue';
 
 @Component({
@@ -100,6 +100,18 @@ export default class Home extends Vue {
   lsData: LsData = utils.storage.loadAll() || utils.storage.default;
   presetDaysChoices = [7, 14, 21, 28];
   planNameMaxLength = 24;
+  planTitleIdsInEdit: string[] = [];
+
+  created() {
+    // Check data for any unlimited plans and add up to current date if not presently added
+    for (const plan of this.lsData.plans) {
+      if (plan.isUnlimited) {
+        utils.plans.updateUnlimitedPlan(plan);
+      }
+    }
+
+    utils.storage.saveAll(this.lsData);
+  }
 
   hideTitleShowForm(e: Event) {
     const targ = e.target as HTMLElement;
@@ -115,30 +127,15 @@ export default class Home extends Vue {
 
     form.style.display = 'block';
     form.querySelector('input')!.focus();
+
+    this.planTitleIdsInEdit.push(form.dataset.planId as string);
   }
 
-  /**
-   * Input field blur event handler.
-   */
-  handleUnfocusFromForm(e: Event, plan: PlanData) {
-    (document.querySelector(
-      '.plan-title-box > h1'
-    ) as HTMLElement).style.display = 'block';
-
-    (document.querySelector(
-      '.plan-title-box > form'
-    ) as HTMLFormElement).style.display = 'none';
-
-    (document.querySelector(
-      '.plan-title-box > form > input'
-    ) as HTMLInputElement).value = plan.title;
-  }
-
-  amendPlanTitle(e: Event, plan: PlanData) {
+  amendPlanTitle(e: Event) {
     const targ = e.target as HTMLFormElement;
 
     for (const savedPlan of this.lsData.plans) {
-      if (savedPlan.id === plan.id) {
+      if (savedPlan.id === targ.dataset.planid) {
         savedPlan.title = (targ.querySelector(
           'input'
         ) as HTMLInputElement).value;
@@ -214,9 +211,9 @@ export default class Home extends Vue {
       }
 
       .plan-squares-box {
-        align-items: flex-start;
+        align-items: stretch;
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         justify-content: center;
         padding: 5px;
       }
@@ -308,8 +305,8 @@ export default class Home extends Vue {
     }
 
     @media all and (min-width: $medquery-min-width-01) {
-      background-color: var(--bgColorAlt);
-      border: 1px solid var(--accentAlt);
+      background-color: var(--bgColor1);
+      border: 1px solid var(--accent1);
       border-radius: 3px;
       margin: 20px auto;
       padding: 10px 20px;

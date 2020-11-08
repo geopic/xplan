@@ -19,16 +19,13 @@ export default class PlanSquare extends Vue {
 
 <style lang="scss">
 .plan-square {
-  border: 1px dotted transparent;
-  border-color: var(--accentAlt);
-  flex: 0 1 25%;
   margin: 2px;
   padding: 5px 10px;
   text-align: center;
 
   &:hover,
   &:active {
-    background-color: var(--bgColorAlt);
+    background-color: var(--bgColor1);
     cursor: pointer;
     user-select: none;
   }

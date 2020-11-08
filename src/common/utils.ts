@@ -6,13 +6,13 @@
 
 import props from '@/common/props';
 import { LsData, PlanData } from '@/common/types';
-import { addDays } from 'date-fns';
+import { addDays, eachDayOfInterval } from 'date-fns';
 import { v4 as uuid } from 'uuid';
 
 export default {
   plans: {
     /**
-     * Create a new 'plan' object out of a title and number of days, then returns it.
+     * Create a new 'plan' object out of a title and number of days, then return it.
      * @param title The title of the plan.
      * @param days How many days it has been set for.
      * @returns Fully initialised 'plan' object.
@@ -31,6 +31,27 @@ export default {
         plan.squares.push({
           id: uuid(),
           date: addDays(new Date(), i),
+          isCompleted: false,
+          notes: null
+        });
+      }
+
+      return plan;
+    },
+
+    /**
+     * Add days (squares) up to today's date to 'unlimited' plan.
+     * @param plan Plan to update.
+     * @returns The updated plan.
+     */
+    updateUnlimitedPlan(plan: PlanData): PlanData {
+      for (const date of eachDayOfInterval({
+        start: new Date(plan.squares.splice(-1)[0].date),
+        end: new Date()
+      })) {
+        plan.squares.push({
+          id: uuid(),
+          date,
           isCompleted: false,
           notes: null
         });
