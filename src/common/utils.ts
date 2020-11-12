@@ -64,7 +64,13 @@ export default {
     /**
      * Default storage object, for use when no localStorage entry exists.
      */
-    default: { theme: 'light', dateFormat: 'EEE do MMM', plans: [] } as LsData,
+    default: {
+      theme: 'light',
+      locale: 'en',
+      dateFormat: 'EEE do MMM',
+      startDateFirst: true,
+      plans: []
+    } as LsData,
 
     /**
      * Get all data from localStorage.
