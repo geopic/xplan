@@ -14,7 +14,9 @@
               :value="plan.title"
               :maxlength="planNameMaxLength"
             />
-            <button type="submit">✅</button>
+            <button type="submit">
+              <font-awesome-icon icon="check-square" />
+            </button>
           </form>
         </div>
         <div class="plan-squares-box">
